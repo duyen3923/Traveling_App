@@ -14,10 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.traveling_app.activity.LoginActivity;
 import com.example.traveling_app.R;
-import com.example.traveling_app.activity.ShareAppActivity;
-import com.example.traveling_app.activity.PointActivity;
 import com.example.traveling_app.activity.TourHistoryActivity;
-import com.example.traveling_app.activity.AboutActivity;
 import com.example.traveling_app.activity.ProfileActivity;
 import com.example.traveling_app.model.other.MenuSectionItem;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,10 +35,10 @@ public class Constants {
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_person_outline_24, R.string.profile_page, ProfileActivity.class));
 
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_directions_car_24, R.string.place_went, TourHistoryActivity.class));
-        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_share_24_1, R.string.share_app, ShareAppActivity.class));
+//        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_share_24_1, R.string.share_app, ShareAppActivity.class));
 
 
-        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_info_24_1, R.string.about_us, AboutActivity.class));
+//        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_info_24_1, R.string.about_us, AboutActivity.class));
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_logout_24, R.string.log_out, LoginActivity.class));
         MENU_SECTION_ITEMS = Collections.unmodifiableList(menuSectionItems);
     }
