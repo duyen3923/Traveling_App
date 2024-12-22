@@ -3,9 +3,6 @@
     <item android:id="@+id/menu_home"
         android:title="Home"
         android:icon="@drawable/main_home_solid_dis"/>
-    <item android:id="@+id/menu_blog"
-        android:title="Blog"
-        android:icon="@drawable/main_news_regular"/>
     <item android:id="@+id/menu_love"
         android:title="Love"
         android:icon="@drawable/main_heart_regular_footer"/>

@@ -1,11 +1,13 @@
 package com.example.traveling_app.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +32,11 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +59,8 @@ public class BookTourActivity extends AppCompatActivity {
     private String merchantCode = "MOMOC2IC20220510";
     private String merchantNameLabel = "Nhà cung cấp";
     private String description = "Thanh toán dịch vụ đặt tour du lịch";
-
+    DecimalFormat format = new DecimalFormat("#.##");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     //--------------------------------------------------------
 
     @Override
@@ -63,11 +71,12 @@ public class BookTourActivity extends AppCompatActivity {
         loadData();
 
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
+
         dattour_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 savePayment();
-                requestPayment();
+//                requestPayment();
             }
         });
 

@@ -12,7 +12,6 @@ public class UserSnapshotParser implements SnapshotParser<User> {
     private UserSnapshotParser() {
         
     }
-
     @NonNull
     @Override
     public User parseSnapshot(@NonNull DataSnapshot snapshot) {
