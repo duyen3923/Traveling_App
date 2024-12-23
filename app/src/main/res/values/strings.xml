@@ -56,15 +56,14 @@
     <string name="about_us_information">
         Thực hiện bởi
         \n
-        Dương Ngọc Danh - 21115053120109
+        Huỳnh Chí Trung - N21DCCN191
         \n
-        Bùi Quốc Vương - 21115053120163
+        Ngô Thị Duyên - N21DCCN000
         \n
-        Lê Quang Lưu - 21115053120126
+        Nguyễn Thúy Quỳnh - N21DCVT000
         \n
-        Hồ Văn Thắng - 21115053120144
-        \n
-        Lê Anh Dũng - 21115053120112
+        Đặng Lợi Vĩ - N21DCAT000
+
     </string>
     <string name="get_current_location">Lấy vị trí hiện tại</string>
     <string name="getting_current_location_status">Đang truy cập vào vị trí hiện tại</string>

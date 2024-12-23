@@ -1,0 +1,12 @@
+[33m94b3993[m[33m ([m[1;36mHEAD -> [m[1;32mfix-bug-1[m[33m, [m[1;31morigin/fix-bug-1[m[33m)[m HEAD@{0}: checkout: moving from main to fix-bug-1
+[33md1a82a2[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: commit: Delete Blog, About, Share
+[33m1efcf6e[m[33m ([m[1;32mtext[m[33m)[m HEAD@{2}: checkout: moving from test to main
+[33mb4df9c7[m[33m ([m[1;32mtest[m[33m)[m HEAD@{3}: commit: .
+[33m56793df[m HEAD@{4}: checkout: moving from main to test
+[33m1efcf6e[m[33m ([m[1;32mtext[m[33m)[m HEAD@{5}: checkout: moving from test to main
+[33m56793df[m HEAD@{6}: checkout: moving from main to test
+[33m1efcf6e[m[33m ([m[1;32mtext[m[33m)[m HEAD@{7}: checkout: moving from test to main
+[33m56793df[m HEAD@{8}: commit: .
+[33m1efcf6e[m[33m ([m[1;32mtext[m[33m)[m HEAD@{9}: checkout: moving from text to test
+[33m1efcf6e[m[33m ([m[1;32mtext[m[33m)[m HEAD@{10}: checkout: moving from main to text
+[33m1efcf6e[m[33m ([m[1;32mtext[m[33m)[m HEAD@{11}: commit (initial): Initial commit

@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.traveling_app.fragment.Menu_Home;
 import com.example.traveling_app.fragment.Menu_Love;
 import com.example.traveling_app.fragment.Menu_Menu;
-import com.example.traveling_app.fragment.Menu_Notification;
 
 public class BottomNaviAdapter extends FragmentStatePagerAdapter {
     public BottomNaviAdapter(@NonNull FragmentManager fm, int behavior) {
@@ -23,8 +22,6 @@ public class BottomNaviAdapter extends FragmentStatePagerAdapter {
                 return new Menu_Home();
             case 1:
                 return new Menu_Love();
-            case 3:
-                return new Menu_Notification();
             case 2:
                 return new Menu_Menu();
         }
@@ -32,6 +29,7 @@ public class BottomNaviAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getCount() {return 4;
+    public int getCount() {
+        return 3;
     }
 }

@@ -1,14 +1,17 @@
 package com.example.traveling_app.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -30,12 +33,17 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import vn.momo.momo_partner.AppMoMoLib;
 
-public class BookTourActivity extends AppCompatActivity {
+public class    BookTourActivity extends AppCompatActivity {
     Button dattour_btn;
     TextView amount_tv,name_tour_tv,address_tour_tv,price_tour_tv,saleprice_tour_tv,point_tv, email_tv, name_person_tv,phone_number_tv;
     TextInputEditText dateEnd_inp,dateStart_inp;
@@ -52,7 +60,8 @@ public class BookTourActivity extends AppCompatActivity {
     private String merchantCode = "MOMOC2IC20220510";
     private String merchantNameLabel = "Nhà cung cấp";
     private String description = "Thanh toán dịch vụ đặt tour du lịch";
-
+    DecimalFormat format = new DecimalFormat("#.##");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     //--------------------------------------------------------
 
     @Override
@@ -63,11 +72,17 @@ public class BookTourActivity extends AppCompatActivity {
         loadData();
 
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
+
         dattour_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 savePayment();
-                requestPayment();
+                Toast.makeText(BookTourActivity.this, "Đặt tour thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(BookTourActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear other activities
+                startActivity(intent);
+                finish();
+//                requestPayment();
             }
         });
 
@@ -234,6 +249,7 @@ public class BookTourActivity extends AppCompatActivity {
         resetNumPoint();
         //increase numBooking
         resetNumBooking();
+
     }
     private void resetNumPoint() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(CurrentUser.getCurrentUser().getUsername());
