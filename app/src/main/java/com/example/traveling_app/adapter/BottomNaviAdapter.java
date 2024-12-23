@@ -32,7 +32,6 @@ public class BottomNaviAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getCount() {
-        return 4;
+    public int getCount() {return 4;
     }
 }
