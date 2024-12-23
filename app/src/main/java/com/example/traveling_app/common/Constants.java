@@ -35,8 +35,6 @@ public class Constants {
 
     static {
         ArrayList<MenuSectionItem> menuSectionItems = new ArrayList<>();
-        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_person_outline_24, R.string.profile_page, ProfileActivity.class));
-
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_directions_car_24, R.string.place_went, TourHistoryActivity.class));
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_share_24_1, R.string.share_app, ShareAppActivity.class));
 

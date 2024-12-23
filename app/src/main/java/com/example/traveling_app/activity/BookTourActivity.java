@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -76,6 +77,11 @@ public class BookTourActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savePayment();
+                Toast.makeText(BookTourActivity.this, "Đặt tour thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(BookTourActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear other activities
+                startActivity(intent);
+                finish();
 //                requestPayment();
             }
         });
@@ -243,6 +249,7 @@ public class BookTourActivity extends AppCompatActivity {
         resetNumPoint();
         //increase numBooking
         resetNumBooking();
+
     }
     private void resetNumPoint() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(CurrentUser.getCurrentUser().getUsername());
