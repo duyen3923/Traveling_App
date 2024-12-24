@@ -148,42 +148,6 @@
         android:textAllCaps="false"
         android:textColor="@color/white"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Hoặc đăng nhập bằng"
-        android:layout_above="@+id/socialicons1"
-        android:textColor="@color/black"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/socialicons1"
-        android:gravity="center"
-        android:layout_alignParentBottom="true">
-
-        <ImageView
-            android:id="@+id/icon_fb"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_margin="3dp"
-            android:src="@drawable/ic_fb"/>
-        <ImageView
-            android:id="@+id/icon_gg"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_margin="3dp"
-            android:src="@drawable/ic_gg"/>
-
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_margin="3dp"
-            android:src="@drawable/ic_ig" />
-
-    </LinearLayout>
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"

@@ -46,10 +46,6 @@ import java.util.Arrays;
 public class RegisterActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
-    ImageView fbBtn;
-    ImageView ggBtn;
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://travelapp-31533-default-rtdb.firebaseio.com/");
     private final String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -59,94 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dangky);
 
-        fbBtn = findViewById(R.id.icon_fb);
-        ggBtn = findViewById(R.id.icon_gg);
-
         callbackManager = CallbackManager.Factory.create();
-
-        final LoginManager facebookLoginMgr = LoginManager.getInstance();
-        facebookLoginMgr.registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-
-                        // Thực hiện lấy thông tin người dùng từ Graph API
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(),
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        try {
-                                            // Lấy tên người dùng từ JSON object
-                                            String userName = object.getString("name");
-
-                                            // Tạo đối tượng User với thông tin người dùng
-                                            User user = new User();
-                                            user.setUsername(userName);
-                                            // Kiểm tra xem user đã tồn tại trong Firebase chưa
-                                            DatabaseReferences.USER_DATABASE_REF.child(userName)
-                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                            if (!snapshot.exists()) {
-                                                                // User chưa tồn tại, đưa thông tin người dùng lên Firebase
-                                                                snapshot.getRef().setValue(user);
-                                                            }
-
-                                                            // Chuyển đến MainActivity với thông tin người dùng
-                                                            User currentUser = new User();
-                                                            currentUser.setUsername(userName);
-                                                            intent.putExtra("user", (Serializable) currentUser);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {
-                                                            // Xử lý lỗi nếu cần
-                                                        }
-                                                    });
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "name,birthday,gender"); // Yêu cầu các trường thông tin cần thiết
-                        request.setParameters(parameters);
-                        request.executeAsync();
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
-
-        fbBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                facebookLoginMgr.logInWithReadPermissions(RegisterActivity.this, Arrays.asList("public_profile"));
-            }
-        });
-        ggBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
 
         final EditText fullname = findViewById(R.id.dangky_user);
         final EditText email = findViewById(R.id.dangky_email);
@@ -188,37 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                         }
                     });
-//                    databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//
-//                            if(snapshot.hasChild(emailtxt)){
-//                                Toast.makeText(activity_dangky.this, "email is already regisred", Toast.LENGTH_SHORT).show();
-//
-//                            }
-//                            else {
-//                                databaseReference.child("users").child(emailtxt).child("fullname").setValue(fullnametxt);
-//                                databaseReference.child("users").child(emailtxt).child("fullname").setValue(emailtxt);
-//                                databaseReference.child("users").child(emailtxt).child("fullname").setValue(matkhautxt);
-//
-//                                Toast.makeText(activity_dangky.this,"user succesfully",Toast.LENGTH_SHORT).show();
-//                                finish();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-
-
                 }
             }
         });
-
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -237,11 +118,6 @@ public class RegisterActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    void  signIn(){
-        Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,1000);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

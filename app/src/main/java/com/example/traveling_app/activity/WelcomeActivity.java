@@ -39,11 +39,6 @@ import java.util.Arrays;
 public class WelcomeActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
-    ImageView fbBtn;
-    ImageView ggBtn;
-
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
 
     Button chondangnhap_btn1,chondangnhap_btn2;
     @Override
@@ -52,96 +47,6 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chondangnhap);
 
         callbackManager = CallbackManager.Factory.create();
-
-        final LoginManager facebookLoginMgr = LoginManager.getInstance();
-        facebookLoginMgr.registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-
-                        // Thực hiện lấy thông tin người dùng từ Graph API
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(),
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        try {
-                                            // Lấy tên người dùng từ JSON object
-                                            String userName = object.getString("name");
-
-                                            // Tạo đối tượng User với thông tin người dùng
-                                            User user = new User();
-                                            user.setUsername(userName);
-                                            // Kiểm tra xem user đã tồn tại trong Firebase chưa
-                                            DatabaseReferences.USER_DATABASE_REF.child(userName)
-                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                            if (!snapshot.exists()) {
-                                                                // User chưa tồn tại, đưa thông tin người dùng lên Firebase
-                                                                snapshot.getRef().setValue(user);
-                                                            }
-
-                                                            // Chuyển đến MainActivity với thông tin người dùng
-                                                            User currentUser = new User();
-                                                            currentUser.setUsername(userName);
-                                                            intent.putExtra("user", (Serializable) currentUser);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {
-                                                            // Xử lý lỗi nếu cần
-                                                        }
-                                                    });
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "name,birthday,gender"); // Yêu cầu các trường thông tin cần thiết
-                        request.setParameters(parameters);
-                        request.executeAsync();
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
-
-        fbBtn = findViewById(R.id.icon_fb);
-        ggBtn = findViewById(R.id.icon_gg);
-        fbBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                facebookLoginMgr.logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("public_profile"));
-            }
-        });
-
-        ggBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
-
-
-
 
         chondangnhap_btn1=(Button) findViewById(R.id.chondangnhap_btn1);
         chondangnhap_btn2=(Button) findViewById(R.id.chondangnhap_btn2);
@@ -159,15 +64,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(myintent2);
             }
         });
-
-
-    }
-
-
-
-    void  signIn(){
-        Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,1000);
     }
 
     @Override
@@ -187,18 +83,9 @@ public class WelcomeActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        callbackManager.onActivityResult(requestCode, resultCode, data);
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//    }
-
     void  navigateToSecondActivity(){
         finish();
         Intent intent = new Intent(WelcomeActivity.this, Login_google.class);
         startActivity(intent);
     }
-
-
-} 
+}
