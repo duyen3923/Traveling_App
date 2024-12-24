@@ -48,10 +48,10 @@ public class BookTourActivity extends AppCompatActivity {
     private boolean isUpdatingPoint = false;
     private String fee = "0";
     int environment = 0;//developer default
-    private String merchantName = "LeQuangLuu";
-    private String merchantCode = "MOMOC2IC20220510";
+    private String merchantName = "Demo SDK";
+    private String merchantCode = "SCB01";
     private String merchantNameLabel = "Nhà cung cấp";
-    private String description = "Thanh toán dịch vụ đặt tour du lịch";
+    private String description = "Thanh toán dịch vụ ABC";
 
     //--------------------------------------------------------
 
@@ -63,6 +63,7 @@ public class BookTourActivity extends AppCompatActivity {
         loadData();
 
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT);
+
         dattour_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,7 +295,7 @@ public class BookTourActivity extends AppCompatActivity {
         eventValue.put("orderLabel", "Mã đơn hàng");
 
         eventValue.put("merchantnamelabel", "Dịch vụ");
-        eventValue.put("fee", "0");
+        eventValue.put("fee", 0);
         eventValue.put("description", description);
 
         eventValue.put("requestId",  merchantCode+"merchant_billId_"+System.currentTimeMillis());

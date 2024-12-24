@@ -68,24 +68,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                task.getResult(ApiException.class);
-                navigateToSecondActivity();
-            } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(),"something wrong",Toast.LENGTH_SHORT).show();
-            }
-        }
         callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    void  navigateToSecondActivity(){
-        finish();
-        Intent intent = new Intent(WelcomeActivity.this, Login_google.class);
-        startActivity(intent);
     }
 }

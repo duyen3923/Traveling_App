@@ -77,9 +77,9 @@ public class ForgotPassActivity extends AppCompatActivity {
 
     public void sendEmail(String email, String code, String username){
         try {
-            String stringSenderEmail = "duongngocdanh6@gmail.com";
+            String stringSenderEmail = "buttfacecat2211@gmail.com";
             String stringReceiverEmail = email;
-            String stringPasswordSenderEmail = "appzzjhgofpjyxuz";
+            String stringPasswordSenderEmail = "tgvdqqqjubaowfbt" ;
 
             String stringHost = "smtp.gmail.com";
             Properties properties = System.getProperties();
