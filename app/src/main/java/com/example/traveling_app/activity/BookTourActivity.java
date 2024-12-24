@@ -67,7 +67,7 @@ public class BookTourActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savePayment();
-                requestPayment();
+                // requestPayment();
             }
         });
 
@@ -234,6 +234,11 @@ public class BookTourActivity extends AppCompatActivity {
         resetNumPoint();
         //increase numBooking
         resetNumBooking();
+
+
+        resetData();
+        finish();
+        startActivity(new Intent(BookTourActivity.this, PaySuccessActivity.class));
     }
     private void resetNumPoint() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(CurrentUser.getCurrentUser().getUsername());
@@ -304,9 +309,8 @@ public class BookTourActivity extends AppCompatActivity {
         eventValue.put("extraData", objExtraData.toString());
         eventValue.put("extra", "");
         AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue);
-
-
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
