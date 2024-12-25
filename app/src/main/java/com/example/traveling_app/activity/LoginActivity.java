@@ -78,9 +78,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dangnhap);
 
-        fbBtn = findViewById(R.id.icon_fb);
-        ggBtn = findViewById(R.id.icon_gg);
-
         email = findViewById(R.id.dangnhap_email);
         final EditText password = findViewById(R.id.dangnhap_matkhau);
         final Button loginbtn = findViewById(R.id.at2_btn1);
