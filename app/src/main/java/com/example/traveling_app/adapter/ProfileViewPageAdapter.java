@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.traveling_app.R;
-import com.example.traveling_app.fragment.UserPostFragment;
 import com.example.traveling_app.fragment.UserInformationFragment;
 
 public class ProfileViewPageAdapter extends FragmentStateAdapter {
@@ -18,8 +17,8 @@ public class ProfileViewPageAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position) {
-            case 0:
-                return new UserPostFragment();
+//            case 0:
+//                return new UserPostFragment();
             case 1:
                 return new UserInformationFragment();
             default:

@@ -1,9 +1,11 @@
 package com.example.traveling_app.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,11 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.traveling_app.R;
 import com.example.traveling_app.common.DatabaseReferences;
 import com.example.traveling_app.model.user.User;
@@ -32,7 +39,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +58,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
@@ -55,6 +69,43 @@ public class LoginActivity extends AppCompatActivity {
 
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://travelapp-31533-default-rtdb.firebaseio.com/");
     TextView quenpass;
+    FirebaseAuth auth;
+    EditText name;
+    EditText email;
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    Toast.makeText(LoginActivity.this," " + result.getData() + " Result" + result.getResultCode(), Toast.LENGTH_SHORT).show();
+                    Log.d("GoogleSignIn", "Result data: " + result.getData());
+                    Log.d("GoogleSignIn", "Result code: " + result.getResultCode());
+
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                        try {
+                            GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
+                            AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+                            FirebaseAuth.getInstance().signInWithCredential(authCredential)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                            name.setText(user.getDisplayName());
+                                            email.setText(user.getEmail());
+                                            Toast.makeText(LoginActivity.this, "Signed in successfully!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Failed to sign in: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Google sign-in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Sign-in cancelled or failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         fbBtn = findViewById(R.id.icon_fb);
         ggBtn = findViewById(R.id.icon_gg);
 
-        final EditText email = findViewById(R.id.dangnhap_email);
+        email = findViewById(R.id.dangnhap_email);
         final EditText password = findViewById(R.id.dangnhap_matkhau);
         final Button loginbtn = findViewById(R.id.at2_btn1);
 
@@ -137,8 +188,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_google_id))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
 
         fbBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +204,8 @@ public class LoginActivity extends AppCompatActivity {
         ggBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
             }
         });
 
@@ -215,14 +271,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        findViewById(R.id.at2_btn1).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(activity_dangnhap.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -232,26 +280,9 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void  signIn(){
-        Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,1000);
-    }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
-            try {
-                task.getResult(ApiException.class);
-                navigateToSecondActivity();
-            } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(),"something wrong",Toast.LENGTH_SHORT).show();
-            }
-        }
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
     void navigateToSecondActivity(){
         finish();
         Intent intent = new Intent(LoginActivity.this, Login_google.class);
