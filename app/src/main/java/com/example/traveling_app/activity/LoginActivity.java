@@ -72,40 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth auth;
     EditText name;
     EditText email;
-    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    Toast.makeText(LoginActivity.this," " + result.getData() + " Result" + result.getResultCode(), Toast.LENGTH_SHORT).show();
-                    Log.d("GoogleSignIn", "Result data: " + result.getData());
-                    Log.d("GoogleSignIn", "Result code: " + result.getResultCode());
 
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                        try {
-                            GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
-                            AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
-                            FirebaseAuth.getInstance().signInWithCredential(authCredential)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                            name.setText(user.getDisplayName());
-                                            email.setText(user.getEmail());
-                                            Toast.makeText(LoginActivity.this, "Signed in successfully!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(LoginActivity.this, "Failed to sign in: " + task.getException(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } catch (ApiException e) {
-                            e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "Google sign-in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Sign-in cancelled or failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,96 +86,6 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginbtn = findViewById(R.id.at2_btn1);
 
         callbackManager = CallbackManager.Factory.create();
-
-        final LoginManager facebookLoginMgr = LoginManager.getInstance();
-        facebookLoginMgr.registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
-                        // Thực hiện lấy thông tin người dùng từ Graph API
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(),
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        try {
-                                            // Lấy tên người dùng từ JSON object
-                                            String userName = object.getString("name");
-
-                                            // Tạo đối tượng User với thông tin người dùng
-                                            User user = new User();
-                                            user.setUsername(userName);
-                                            // Kiểm tra xem user đã tồn tại trong Firebase chưa
-                                            DatabaseReferences.USER_DATABASE_REF.child(userName)
-                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                            if (!snapshot.exists()) {
-                                                                // User chưa tồn tại, đưa thông tin người dùng lên Firebase
-                                                                snapshot.getRef().setValue(user);
-                                                            }
-
-                                                            // Chuyển đến MainActivity với thông tin người dùng
-                                                            User currentUser = new User();
-                                                            currentUser.setUsername(userName);
-                                                            intent.putExtra("user", (Serializable) currentUser);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {
-                                                            // Xử lý lỗi nếu cần
-                                                        }
-                                                    });
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "name,birthday,gender"); // Yêu cầu các trường thông tin cần thiết
-                        request.setParameters(parameters);
-                        request.executeAsync();
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
-
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.client_google_id))
-                .requestEmail()
-                .build();
-
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, options);
-
-        fbBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                facebookLoginMgr.logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile"));
-            }
-        });
-        ggBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = googleSignInClient.getSignInIntent();
-                activityResultLauncher.launch(intent);
-            }
-        });
-
 
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,16 +156,11 @@ public class LoginActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
     void navigateToSecondActivity(){
         finish();
         Intent intent = new Intent(LoginActivity.this, Login_google.class);
         startActivity(intent);
     }
-
     @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
