@@ -159,17 +159,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(myintent2);
             }
         });
-
-
     }
-
-
-
     void  signIn(){
         Intent signInIntent = gsc.getSignInIntent();
         startActivityForResult(signInIntent,1000);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
@@ -186,13 +180,6 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        callbackManager.onActivityResult(requestCode, resultCode, data);
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//    }
 
     void  navigateToSecondActivity(){
         finish();

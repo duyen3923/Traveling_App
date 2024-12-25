@@ -91,4 +91,5 @@
     <string name="facebook_client_token">b6c86bb3382f89f98066d409ced7f443</string>
     <string name="notification_content_placeholder">%1$s đã bình luận vào bài viết của bạn</string>
     <string name="enter_your_post_content">Nhập nội dung bài viết của bạn</string>
+    <string name="client_google_id">108010782248-qtiapkho9t8g9fh3ilj13fhtplrq3ej5.apps.googleusercontent.com</string>
 </resources>
