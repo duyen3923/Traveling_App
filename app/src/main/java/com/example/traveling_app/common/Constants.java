@@ -16,6 +16,7 @@ import com.example.traveling_app.activity.LoginActivity;
 import com.example.traveling_app.R;
 import com.example.traveling_app.activity.TourHistoryActivity;
 import com.example.traveling_app.activity.ProfileActivity;
+import com.example.traveling_app.activity.UpdateUserInformationActivity;
 import com.example.traveling_app.model.other.MenuSectionItem;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -33,10 +34,7 @@ public class Constants {
     static {
         ArrayList<MenuSectionItem> menuSectionItems = new ArrayList<>();
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_directions_car_24, R.string.place_went, TourHistoryActivity.class));
-//        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_share_24_1, R.string.share_app, ShareAppActivity.class));
-
-
-//        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_info_24_1, R.string.about_us, AboutActivity.class));
+        menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_edit_24, R.string.edit_profile, UpdateUserInformationActivity.class));
         menuSectionItems.add(new MenuSectionItem(R.drawable.baseline_logout_24, R.string.log_out, LoginActivity.class));
         MENU_SECTION_ITEMS = Collections.unmodifiableList(menuSectionItems);
     }
