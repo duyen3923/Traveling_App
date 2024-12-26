@@ -56,8 +56,8 @@ public class    BookTourActivity extends AppCompatActivity {
     private boolean isUpdatingPoint = false;
     private String fee = "0";
     int environment = 0;//developer default
-    private String merchantName = "LeQuangLuu";
-    private String merchantCode = "MOMOC2IC20220510";
+    private String merchantName = "Demo SDK";
+    private String merchantCode = "SCB01";
     private String merchantNameLabel = "Nhà cung cấp";
     private String description = "Thanh toán dịch vụ đặt tour du lịch";
     DecimalFormat format = new DecimalFormat("#.##");
@@ -77,8 +77,11 @@ public class    BookTourActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savePayment();
+
+                // pay success
+                resetData();
                 Toast.makeText(BookTourActivity.this, "Đặt tour thành công", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(BookTourActivity.this, MainActivity.class);
+                Intent intent = new Intent(BookTourActivity.this, PaySuccessActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear other activities
                 startActivity(intent);
                 finish();
@@ -305,7 +308,7 @@ public class    BookTourActivity extends AppCompatActivity {
         eventValue.put("orderLabel", "Mã đơn hàng");
 
         eventValue.put("merchantnamelabel", "Dịch vụ");
-        eventValue.put("fee", "0");
+        eventValue.put("fee", 0);
         eventValue.put("description", description);
 
         eventValue.put("requestId",  merchantCode+"merchant_billId_"+System.currentTimeMillis());
